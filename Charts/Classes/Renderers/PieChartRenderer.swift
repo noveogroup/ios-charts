@@ -212,6 +212,14 @@ public class PieChartRenderer: ChartDataRendererBase
 
                 let value = usePercentValuesEnabled ? e.value / yValueSum * 100.0 : e.value
                 
+                // MODIFIED --->
+                if (value < 10)
+                {
+                    xIndex++
+                    continue
+                }
+                // MODIFIED <---
+                
                 let val = formatter.stringFromNumber(value)!
                 
                 let lineHeight = valueFont.lineHeight
@@ -432,6 +440,17 @@ public class PieChartRenderer: ChartDataRendererBase
                 CGPathAddArc(path, nil, highlighted.midX, highlighted.midY, innerRadius, startAngle * ChartUtils.Math.FDEG2RAD, endAngle * ChartUtils.Math.FDEG2RAD, false)
                 CGPathCloseSubpath(path)
             }
+            
+            // MODIFIED ---> shadow
+            let bezierPath = UIBezierPath()
+            bezierPath.addArcWithCenter(CGPoint(x: highlighted.midX, y: highlighted.midY), radius: chart.radius, startAngle: startAngle * ChartUtils.Math.FDEG2RAD, endAngle: endAngle * ChartUtils.Math.FDEG2RAD, clockwise: false)
+            bezierPath.closePath()
+            
+            CGContextSetShadowWithColor(context, CGSize(width: 0, height: 0), 10, UIColor.darkGrayColor().CGColor)
+            UIColor.darkGrayColor().setStroke()
+            bezierPath.lineWidth = 0
+            bezierPath.stroke()
+            // MODIFIED <---
             
             CGContextBeginPath(context)
             CGContextAddPath(context, path)
