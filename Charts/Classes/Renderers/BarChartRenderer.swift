@@ -340,17 +340,20 @@ public class BarChartRenderer: ChartDataRendererBase
                         
                         if (dataSet as! BarChartDataSet).specialTimeFormat
                         {
-                            var str = ""
-                            let hours : Int = Int(val) / 60 / 60;
-                            let minutes : Int  = (Int(val) - hours * 60 * 60) / 60;
-                            let seconds : Int = (Int(val) - hours * 60 * 60) - minutes * 60;
-                            if val / 60.0 / 60.0 > 1.0
+                            var str = "0"
+                            if val > 0.0
                             {
-                                str = String(format: "%02d", hours) + ":" + String(format: "%02d", minutes) + "'" + String(format: "%02d", seconds) + "''";
-                            }
-                            else
-                            {
-                                str = String(format: "%02d", minutes) + "'" + String(format: "%02d", seconds) + "''";
+                                let hours : Int = Int(val) / 60 / 60;
+                                let minutes : Int  = (Int(val) - hours * 60 * 60) / 60;
+                                let seconds : Int = (Int(val) - hours * 60 * 60) - minutes * 60;
+                                if val / 60.0 / 60.0 > 1.0
+                                {
+                                    str = String(format: "%02d", hours) + ":" + String(format: "%02d", minutes) + "'" + String(format: "%02d", seconds) + "''";
+                                }
+                                else
+                                {
+                                    str = String(format: "%02d", minutes) + "'" + String(format: "%02d", seconds) + "''";
+                                }
                             }
                             
                             drawValue(context: context,
