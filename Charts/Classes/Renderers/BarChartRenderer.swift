@@ -273,7 +273,7 @@ public class BarChartRenderer: ChartDataRendererBase
             var dataSets = barData.dataSets
             
             let drawValueAboveBar = dataProvider.isDrawValueAboveBarEnabled
-
+            
             var posOffset: CGFloat
             var negOffset: CGFloat
             
@@ -337,14 +337,39 @@ public class BarChartRenderer: ChartDataRendererBase
                         }
                         
                         let val = e.value
-
-                        drawValue(context: context,
-                            value: formatter.stringFromNumber(val)!,
-                            xPos: valuePoint.x,
-                            yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
-                            font: valueFont,
-                            align: .Center,
-                            color: dataSet.valueTextColorAt(j))
+                        
+                        if (dataSet as! BarChartDataSet).specialTimeFormat
+                        {
+                            var str = ""
+                            let hours : Int = Int(val) / 60 / 60;
+                            let minutes : Int  = (Int(val) - hours * 60 * 60) / 60;
+                            let seconds : Int = (Int(val) - hours * 60 * 60) - minutes * 60;
+                            if val / 60.0 / 60.0 > 1.0
+                            {
+                                str = String(format: "%02d", hours) + ":" + String(format: "%02d", minutes) + "'" + String(format: "%02d", seconds) + "''";
+                            }
+                            else
+                            {
+                                str = String(format: "%02d", minutes) + "'" + String(format: "%02d", seconds) + "''";
+                            }
+                            
+                            drawValue(context: context,
+                                value: str,
+                                xPos: valuePoint.x,
+                                yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                font: valueFont,
+                                align: .Center,
+                                color: dataSet.valueTextColorAt(j))
+                        }
+                        else {
+                            drawValue(context: context,
+                                value: formatter.stringFromNumber(val)!,
+                                xPos: valuePoint.x,
+                                yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                font: valueFont,
+                                align: .Center,
+                                color: dataSet.valueTextColorAt(j))
+                        }
                     }
                 }
                 else
@@ -502,7 +527,7 @@ public class BarChartRenderer: ChartDataRendererBase
                 
                 let groupspace = barData.groupSpace
                 let isStack = h.stackIndex < 0 ? false : true
-
+                
                 // calculate the correct x-position
                 let x = CGFloat(index * setCount + dataSetIndex) + groupspace / 2.0 + groupspace * CGFloat(index)
                 
@@ -519,7 +544,7 @@ public class BarChartRenderer: ChartDataRendererBase
                     y1 = e.value
                     y2 = 0.0
                 }
-
+                
                 prepareBarHighlight(x: x, y1: y1, y2: y2, barspacehalf: barspaceHalf, trans: trans, rect: &barRect)
                 
                 CGContextFillRect(context, barRect)
