@@ -39,6 +39,16 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
             a += "h"
         }
         
+        var twoLines = false
+        for xValue in xValues
+        {
+            if xValue!.rangeOfString("\n") != nil
+            {
+                twoLines = true
+                break
+            }
+        }
+        
         let widthText = a as NSString
         
         let labelSize = widthText.sizeWithAttributes([NSFontAttributeName: xAxis.labelFont])
@@ -46,7 +56,10 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
         let labelWidth = labelSize.width
         let labelHeight = labelSize.height
         
-        let labelRotatedSize = ChartUtils.sizeOfRotatedRectangle(labelSize, degrees: xAxis.labelRotationAngle)
+        var labelRotatedSize = ChartUtils.sizeOfRotatedRectangle(labelSize, degrees: xAxis.labelRotationAngle)
+        if twoLines {
+            labelRotatedSize.height = labelRotatedSize.height * 2
+        }
         
         xAxis.labelWidth = labelWidth
         xAxis.labelHeight = labelHeight

@@ -38,11 +38,11 @@ public class ChartTransformer: NSObject
         
         if CGFloat.infinity == scaleX
         {
-            scaleX = 0.0
+            scaleX = 1.0
         }
         if CGFloat.infinity == scaleY
         {
-            scaleY = 0.0
+            scaleY = 1.0
         }
 
         // setup all matrices
@@ -203,6 +203,9 @@ public class ChartTransformer: NSObject
     
     public var pixelToValueMatrix: CGAffineTransform
     {
+        if valueToPixelMatrix.a * valueToPixelMatrix.d - valueToPixelMatrix.b * valueToPixelMatrix.c  == 0.0 {
+            return CGAffineTransformIdentity
+        }
         return CGAffineTransformInvert(valueToPixelMatrix)
     }
 }
