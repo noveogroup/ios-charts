@@ -420,55 +420,104 @@ public class BarChartRenderer: ChartDataRendererBase
                         {
                             // draw stack values
                             
-                            let vals = values!
-                            var transformed = [CGPoint]()
-                            
-                            var posY = 0.0
-                            var negY = -e.negativeSum
-                            
-                            for (var k = 0; k < vals.count; k++)
+                            if (dataSet as! BarChartDataSet).drawPositiveSumValues
                             {
-                                let value = vals[k]
-                                var y: Double
-                                
-                                if value >= 0.0
+                                let val = e.positiveSum
+                                if (dataSet as! BarChartDataSet).specialTimeFormat
                                 {
-                                    posY += value
-                                    y = posY
+                                    var str = "0"
+                                    if val > 0.0
+                                    {
+                                        let hours : Int = Int(val) / 60 / 60;
+                                        let minutes : Int  = (Int(val) - hours * 60 * 60) / 60;
+                                        let seconds : Int = (Int(val) - hours * 60 * 60) - minutes * 60;
+                                        if val / 60.0 / 60.0 > 1.0
+                                        {
+                                            if minutes == 59
+                                            {
+                                                str = String(format: "%02d", hours+1) + ":00";
+                                            }
+                                            else
+                                            {
+                                                str = String(format: "%02d", hours) + ":" + String(format: "%02d", minutes+1);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            str = String(format: "%02d", minutes) + "'" + String(format: "%02d", seconds) + "''";
+                                        }
+                                    }
+                                    
+                                    drawValue(context: context,
+                                        value: str,
+                                        xPos: valuePoint.x,
+                                        yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                        font: valueFont,
+                                        align: .Center,
+                                        color: dataSet.valueTextColorAt(j))
                                 }
-                                else
-                                {
-                                    y = negY
-                                    negY -= value
+                                else {
+                                    drawValue(context: context,
+                                        value: formatter.stringFromNumber(val)!,
+                                        xPos: valuePoint.x,
+                                        yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                        font: valueFont,
+                                        align: .Center,
+                                        color: dataSet.valueTextColorAt(j))
                                 }
-                                
-                                transformed.append(CGPoint(x: 0.0, y: CGFloat(y) * animator.phaseY))
                             }
-                            
-                            trans.pointValuesToPixel(&transformed)
-                            
-                            for (var k = 0; k < transformed.count; k++)
+                            else
                             {
-                                let x = valuePoint.x
-                                let y = transformed[k].y + (vals[k] >= 0 ? posOffset : negOffset)
+                                let vals = values!
+                                var transformed = [CGPoint]()
                                 
-                                if (!viewPortHandler.isInBoundsRight(x))
+                                var posY = 0.0
+                                var negY = -e.negativeSum
+                                
+                                for (var k = 0; k < vals.count; k++)
                                 {
-                                    break
+                                    let value = vals[k]
+                                    var y: Double
+                                    
+                                    if value >= 0.0
+                                    {
+                                        posY += value
+                                        y = posY
+                                    }
+                                    else
+                                    {
+                                        y = negY
+                                        negY -= value
+                                    }
+                                    
+                                    transformed.append(CGPoint(x: 0.0, y: CGFloat(y) * animator.phaseY))
                                 }
                                 
-                                if (!viewPortHandler.isInBoundsY(y) || !viewPortHandler.isInBoundsLeft(x))
-                                {
-                                    continue
-                                }
+                                trans.pointValuesToPixel(&transformed)
                                 
-                                drawValue(context: context,
-                                    value: formatter.stringFromNumber(vals[k])!,
-                                    xPos: x,
-                                    yPos: y,
-                                    font: valueFont,
-                                    align: .Center,
-                                    color: dataSet.valueTextColorAt(j))
+                                for (var k = 0; k < transformed.count; k++)
+                                {
+                                    let x = valuePoint.x
+                                    let y = transformed[k].y + (vals[k] >= 0 ? posOffset : negOffset)
+                                    
+                                    if (!viewPortHandler.isInBoundsRight(x))
+                                    {
+                                        break
+                                    }
+                                    
+                                    if (!viewPortHandler.isInBoundsY(y) || !viewPortHandler.isInBoundsLeft(x))
+                                    {
+                                        continue
+                                    }
+                                    
+                                    drawValue(context: context,
+                                        value: formatter.stringFromNumber(vals[k])!,
+                                        xPos: x,
+                                        yPos: y,
+                                        font: valueFont,
+                                        align: .Center,
+                                        color: dataSet.valueTextColorAt(j))
+                                }
                             }
                         }
                     }

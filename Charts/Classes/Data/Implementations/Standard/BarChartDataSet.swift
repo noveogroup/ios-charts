@@ -37,8 +37,10 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
         initialize()
     }
     
-    /// if true, value highlighting is enabled
+    /// if true, value print in 0:00 or 00'00'' format
     public var specialTimeFormat = false
+    
+    public var drawPositiveSumValues = false
     
     // MARK: - Data functions and accessors
     
