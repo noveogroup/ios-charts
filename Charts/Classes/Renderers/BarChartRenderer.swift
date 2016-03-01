@@ -348,7 +348,11 @@ public class BarChartRenderer: ChartDataRendererBase
                                 let seconds : Int = (Int(val) - hours * 60 * 60) - minutes * 60;
                                 if val / 60.0 / 60.0 > 1.0
                                 {
-                                    if minutes == 59
+                                    if minutes == 0
+                                    {
+                                        str = String(format: "%02d", hours) + ":00";
+                                    }
+                                    else if minutes == 59
                                     {
                                         str = String(format: "%02d", hours+1) + ":00";
                                     }
@@ -433,7 +437,11 @@ public class BarChartRenderer: ChartDataRendererBase
                                         let seconds : Int = (Int(val) - hours * 60 * 60) - minutes * 60;
                                         if val / 60.0 / 60.0 > 1.0
                                         {
-                                            if minutes == 59
+                                            if minutes == 0
+                                            {
+                                                str = String(format: "%02d", hours) + ":00";
+                                            }
+                                            else if minutes == 59
                                             {
                                                 str = String(format: "%02d", hours+1) + ":00";
                                             }
