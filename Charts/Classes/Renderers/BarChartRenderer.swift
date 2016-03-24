@@ -374,21 +374,21 @@ public class BarChartRenderer: ChartDataRendererBase
                             }
                             
                             drawValue(context: context,
-                                value: str,
-                                xPos: valuePoint.x,
-                                yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
-                                font: valueFont,
-                                align: .Center,
-                                color: dataSet.valueTextColorAt(j))
+                                      value: str,
+                                      xPos: valuePoint.x,
+                                      yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                      font: valueFont,
+                                      align: .Center,
+                                      color: dataSet.valueTextColorAt(j))
                         }
                         else {
                             drawValue(context: context,
-                                value: formatter.stringFromNumber(val)!,
-                                xPos: valuePoint.x,
-                                yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
-                                font: valueFont,
-                                align: .Center,
-                                color: dataSet.valueTextColorAt(j))
+                                      value: formatter.stringFromNumber(val)!,
+                                      xPos: valuePoint.x,
+                                      yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                      font: valueFont,
+                                      align: .Center,
+                                      color: dataSet.valueTextColorAt(j))
                         }
                     }
                 }
@@ -419,28 +419,18 @@ public class BarChartRenderer: ChartDataRendererBase
                             }
                             
                             drawValue(context: context,
-                                value: formatter.stringFromNumber(e.value)!,
-                                xPos: valuePoint.x,
-                                yPos: valuePoint.y + (e.value >= 0.0 ? posOffset : negOffset),
-                                font: valueFont,
-                                align: .Center,
-                                color: dataSet.valueTextColorAt(j))
+                                      value: formatter.stringFromNumber(e.value)!,
+                                      xPos: valuePoint.x,
+                                      yPos: valuePoint.y + (e.value >= 0.0 ? posOffset : negOffset),
+                                      font: valueFont,
+                                      align: .Center,
+                                      color: dataSet.valueTextColorAt(j))
                         }
                         else
                         {
                             // draw stack values
                             
-//<<<<<<< HEAD
-//                            if (dataSet as! BarChartDataSet).drawPositiveSumValues
-//=======
-                            let vals = values!
-                            var transformed = [CGPoint]()
-                            
-                            var posY = 0.0
-                            var negY = -e.negativeSum
-                            
-                            for k in 0 ..< vals.count
-//>>>>>>> 43a079682e875fe7f01a4f3a9957116ddcd6a5aa
+                            if (dataSet as! BarChartDataSet).drawPositiveSumValues
                             {
                                 let val = e.positiveSum
                                 if (dataSet as! BarChartDataSet).specialTimeFormat
@@ -476,31 +466,24 @@ public class BarChartRenderer: ChartDataRendererBase
                                     }
                                     
                                     drawValue(context: context,
-                                        value: str,
-                                        xPos: valuePoint.x,
-                                        yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
-                                        font: valueFont,
-                                        align: .Center,
-                                        color: dataSet.valueTextColorAt(j))
+                                              value: str,
+                                              xPos: valuePoint.x,
+                                              yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                              font: valueFont,
+                                              align: .Center,
+                                              color: dataSet.valueTextColorAt(j))
                                 }
                                 else {
                                     drawValue(context: context,
-                                        value: formatter.stringFromNumber(val)!,
-                                        xPos: valuePoint.x,
-                                        yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
-                                        font: valueFont,
-                                        align: .Center,
-                                        color: dataSet.valueTextColorAt(j))
+                                              value: formatter.stringFromNumber(val)!,
+                                              xPos: valuePoint.x,
+                                              yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                              font: valueFont,
+                                              align: .Center,
+                                              color: dataSet.valueTextColorAt(j))
                                 }
                             }
-//<<<<<<< HEAD
-//                            else
-//=======
-                            
-                            trans.pointValuesToPixel(&transformed)
-                            
-                            for k in 0 ..< transformed.count
-//>>>>>>> 43a079682e875fe7f01a4f3a9957116ddcd6a5aa
+                            else
                             {
                                 let vals = values!
                                 var transformed = [CGPoint]()
@@ -545,12 +528,12 @@ public class BarChartRenderer: ChartDataRendererBase
                                     }
                                     
                                     drawValue(context: context,
-                                        value: formatter.stringFromNumber(vals[k])!,
-                                        xPos: x,
-                                        yPos: y,
-                                        font: valueFont,
-                                        align: .Center,
-                                        color: dataSet.valueTextColorAt(j))
+                                              value: formatter.stringFromNumber(vals[k])!,
+                                              xPos: x,
+                                              yPos: y,
+                                              font: valueFont,
+                                              align: .Center,
+                                              color: dataSet.valueTextColorAt(j))
                                 }
                             }
                         }
