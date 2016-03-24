@@ -642,17 +642,6 @@ public class PieChartRenderer: ChartDataRendererBase
                     sweepAngle: sweepAngleOuter)
             }
             
-//            // MODIFIED ---> shadow
-//            let bezierPath = UIBezierPath()
-//            bezierPath.addArcWithCenter(CGPoint(x: highlighted.midX, y: highlighted.midY), radius: chart.radius, startAngle: startAngle * ChartUtils.Math.FDEG2RAD, endAngle: endAngle * ChartUtils.Math.FDEG2RAD, clockwise: false)
-//            bezierPath.closePath()
-//            
-//            CGContextSetShadowWithColor(context, CGSize(width: 0, height: 0), 10, UIColor.darkGrayColor().CGColor)
-//            UIColor.darkGrayColor().setStroke()
-//            bezierPath.lineWidth = 0
-//            bezierPath.stroke()
-//            // MODIFIED <---
-            
             if drawInnerArc &&
                 (innerRadius > 0.0 || accountForSliceSpacing)
             {
@@ -690,6 +679,23 @@ public class PieChartRenderer: ChartDataRendererBase
                     innerRadius,
                     endAngleInner * ChartUtils.Math.FDEG2RAD,
                     -sweepAngleInner * ChartUtils.Math.FDEG2RAD)
+                
+                // MODIFIED ---> shadow
+                let bezierPath = UIBezierPath()
+                bezierPath.addArcWithCenter(
+                    CGPoint(x: center.x + innerRadius * cos(endAngleInner * ChartUtils.Math.FDEG2RAD),
+                        y: center.y + innerRadius * sin(endAngleInner * ChartUtils.Math.FDEG2RAD)),
+                    radius: chart.radius,
+                    startAngle: startAngleShifted * ChartUtils.Math.FDEG2RAD,
+                    endAngle: -sweepAngleInner * ChartUtils.Math.FDEG2RAD,
+                    clockwise: false)
+                bezierPath.closePath()
+                
+                CGContextSetShadowWithColor(context, CGSize(width: 0, height: 0), 10, UIColor.darkGrayColor().CGColor)
+                UIColor.darkGrayColor().setStroke()
+                bezierPath.lineWidth = 0
+                bezierPath.stroke()
+                // MODIFIED <---
             }
             else
             {
