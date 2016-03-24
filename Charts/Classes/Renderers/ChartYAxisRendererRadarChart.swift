@@ -13,7 +13,11 @@
 
 import Foundation
 import CoreGraphics
-import UIKit
+
+#if !os(OSX)
+    import UIKit
+#endif
+
 
 public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
 {
@@ -74,7 +78,7 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
             
             var v = yMin
             
-            for (var i = 0; i < labelCount; i++)
+            for _ in 0 ..< labelCount
             {
                 yAxis.entries.append(v)
                 v += step
@@ -103,11 +107,6 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
                 let rawCount = Double(yMin) / interval
                 var first = rawCount < 0.0 ? floor(rawCount) * interval : ceil(rawCount) * interval;
                 
-                if (first < yMin && yAxis.isStartAtZeroEnabled)
-                { // Force the first label to be at the 0 (or smallest negative value)
-                    first = yMin
-                }
-                
                 if (first == 0.0)
                 { // Fix for IEEE negative zero case (Where value == -0.0, and 0.0 == -0.0)
                     first = 0.0
@@ -115,12 +114,10 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
                 
                 let last = ChartUtils.nextUp(floor(Double(yMax) / interval) * interval)
                 
-                var f: Double
-                var i: Int
                 var n = 0
-                for (f = first; f <= last; f += interval)
+                for _ in first.stride(through: last, by: interval)
                 {
-                    ++n
+                    n += 1
                 }
                 
                 if (isnan(yAxis.customAxisMax))
@@ -134,14 +131,19 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
                     yAxis.entries = [Double](count: n, repeatedValue: 0.0)
                 }
                 
-                for (f = first, i = 0; i < n; f += interval, ++i)
+                var f = first
+                var i = 0
+                while (i < n)
                 {
                     yAxis.entries[i] = Double(f)
+                    
+                    f += interval
+                    i += 1
                 }
             }
         }
         
-        if !yAxis.isStartAtZeroEnabled && yAxis.entries[0] < yMin
+        if yAxis.entries[0] < yMin
         {
             // If startAtZero is disabled, and the first label is lower that the axis minimum,
             // Then adjust the axis minimum
@@ -173,7 +175,7 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
         
         let labelLineHeight = yAxis.labelFont.lineHeight
         
-        for (var j = 0; j < labelCount; j++)
+        for j in 0 ..< labelCount
         {
             if (j == labelCount - 1 && yAxis.isDrawTopYLabelEntryEnabled == false)
             {
@@ -213,7 +215,7 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
         
         let center = chart.centerOffsets
         
-        for (var i = 0; i < limitLines.count; i++)
+        for i in 0 ..< limitLines.count
         {
             let l = limitLines[i]
             
@@ -237,7 +239,7 @@ public class ChartYAxisRendererRadarChart: ChartYAxisRenderer
             
             CGContextBeginPath(context)
             
-            for (var j = 0, count = chart.data!.xValCount; j < count; j++)
+            for j in 0 ..< chart.data!.xValCount
             {
                 let p = ChartUtils.getPosition(center: center, dist: r, angle: sliceangle * CGFloat(j) + chart.rotationAngle)
                 

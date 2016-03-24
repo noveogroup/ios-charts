@@ -13,7 +13,11 @@
 
 import Foundation
 import CoreGraphics
-import UIKit
+
+#if !os(OSX)
+    import UIKit
+#endif
+
 
 public class ScatterChartRenderer: LineScatterCandleRadarChartRenderer
 {
@@ -30,7 +34,7 @@ public class ScatterChartRenderer: LineScatterCandleRadarChartRenderer
     {
         guard let scatterData = dataProvider?.scatterData else { return }
         
-        for (var i = 0; i < scatterData.dataSetCount; i++)
+        for i in 0 ..< scatterData.dataSetCount
         {
             guard let set = scatterData.getDataSetByIndex(i) else { continue }
             
@@ -77,7 +81,7 @@ public class ScatterChartRenderer: LineScatterCandleRadarChartRenderer
         
         CGContextSaveGState(context)
         
-        for (var j = 0, count = Int(min(ceil(CGFloat(entryCount) * animator.phaseX), CGFloat(entryCount))); j < count; j++)
+        for j in 0 ..< Int(min(ceil(CGFloat(entryCount) * animator.phaseX), CGFloat(entryCount)))
         {
             guard let e = dataSet.entryForIndex(j) else { continue }
             
@@ -275,7 +279,7 @@ public class ScatterChartRenderer: LineScatterCandleRadarChartRenderer
             
             var pt = CGPoint()
             
-            for (var i = 0; i < scatterData.dataSetCount; i++)
+            for i in 0 ..< scatterData.dataSetCount
             {
                 let dataSet = dataSets[i]
                 
@@ -296,7 +300,7 @@ public class ScatterChartRenderer: LineScatterCandleRadarChartRenderer
                 let shapeSize = dataSet.scatterShapeSize
                 let lineHeight = valueFont.lineHeight
                 
-                for (var j = 0, count = Int(ceil(CGFloat(entryCount) * phaseX)); j < count; j++)
+                for j in 0 ..< Int(ceil(CGFloat(entryCount) * phaseX))
                 {
                     guard let e = dataSet.entryForIndex(j) else { break }
                     
@@ -351,7 +355,7 @@ public class ScatterChartRenderer: LineScatterCandleRadarChartRenderer
         
         CGContextSaveGState(context)
         
-        for (var i = 0; i < indices.count; i++)
+        for i in 0 ..< indices.count
         {
             guard let set = scatterData.getDataSetByIndex(indices[i].dataSetIndex) as? IScatterChartDataSet else { continue }
             

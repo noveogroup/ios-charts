@@ -13,7 +13,11 @@
 
 import Foundation
 import CoreGraphics
-import UIKit
+
+#if !os(OSX)
+    import UIKit
+#endif
+
 
 public class ChartXAxisRenderer: ChartAxisRendererBase
 {
@@ -34,7 +38,7 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
         
         let max = Int(round(xValAverageLength + Double(xAxis.spaceBetweenLabels)))
         
-        for (var i = 0; i < max; i++)
+        for _ in 0 ..< max
         {
             a += "h"
         }
@@ -237,14 +241,12 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
         }
         
         CGContextSaveGState(context)
-
-        if (!xAxis.gridAntialiasEnabled)
-        {
-            CGContextSetShouldAntialias(context, false)
-        }
-
+        
+        CGContextSetShouldAntialias(context, xAxis.gridAntialiasEnabled)
         CGContextSetStrokeColorWithColor(context, xAxis.gridColor.CGColor)
         CGContextSetLineWidth(context, xAxis.gridLineWidth)
+        CGContextSetLineCap(context, xAxis.gridLineCap)
+        
         if (xAxis.gridLineDashLengths != nil)
         {
             CGContextSetLineDash(context, xAxis.gridLineDashPhase, xAxis.gridLineDashLengths, xAxis.gridLineDashLengths.count)
@@ -295,7 +297,7 @@ public class ChartXAxisRenderer: ChartAxisRendererBase
         
         var position = CGPoint(x: 0.0, y: 0.0)
         
-        for (var i = 0; i < limitLines.count; i++)
+        for i in 0 ..< limitLines.count
         {
             let l = limitLines[i]
             

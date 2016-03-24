@@ -13,7 +13,7 @@
 //
 
 import Foundation
-import UIKit
+
 import Charts
 import Realm
 import Realm.Dynamic
@@ -100,7 +100,7 @@ public class RealmBubbleDataSet: RealmBarLineScatterCandleBubbleDataSet, IBubble
         _yMin = yMin(_cache[start - _cacheFirst] as! BubbleChartDataEntry)
         _yMax = yMax(_cache[start - _cacheFirst] as! BubbleChartDataEntry)
         
-        for (var i = start; i <= endValue; i++)
+        for i in start ... endValue
         {
             let entry = _cache[i - _cacheFirst] as! BubbleChartDataEntry
             

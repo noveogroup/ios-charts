@@ -13,7 +13,7 @@
 //
 
 import Foundation
-import UIKit
+import CoreGraphics
 
 public class ChartXAxis: ChartAxisBase
 {
@@ -111,7 +111,7 @@ public class ChartXAxis: ChartAxisBase
     {
         var longest = ""
         
-        for (var i = 0; i < values.count; i++)
+        for i in 0 ..< values.count
         {
             let text = values[i]
             

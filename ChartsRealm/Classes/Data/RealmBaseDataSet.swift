@@ -13,7 +13,7 @@
 //
 
 import Foundation
-import UIKit
+
 import Charts
 import Realm
 import Realm.Dynamic
@@ -30,7 +30,7 @@ public class RealmBaseDataSet: ChartBaseDataSet
         super.init()
         
         // default color
-        colors.append(UIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
+        colors.append(NSUIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
         
         initialize()
     }
@@ -40,7 +40,7 @@ public class RealmBaseDataSet: ChartBaseDataSet
         super.init()
         
         // default color
-        colors.append(UIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
+        colors.append(NSUIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
         
         self.label = label
         
@@ -52,7 +52,7 @@ public class RealmBaseDataSet: ChartBaseDataSet
         super.init()
         
         // default color
-        colors.append(UIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
+        colors.append(NSUIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
         
         self.label = label
         
@@ -86,7 +86,7 @@ public class RealmBaseDataSet: ChartBaseDataSet
         super.init()
         
         // default color
-        colors.append(UIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
+        colors.append(NSUIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
         
         self.label = label
         
@@ -163,7 +163,7 @@ public class RealmBaseDataSet: ChartBaseDataSet
             _cache.removeAll()
             _cache.reserveCapacity(end - start + 1)
             
-            for (var i = UInt(start), max = UInt(end + 1); i < max; i++)
+            for i in UInt(start) ..< UInt(end + 1)
             {
                 _cache.append(buildEntryFromResultObject(results.objectAtIndex(i), atIndex: i))
             }
@@ -177,7 +177,7 @@ public class RealmBaseDataSet: ChartBaseDataSet
             var newEntries = [ChartDataEntry]()
             newEntries.reserveCapacity(start - _cacheFirst)
             
-            for (var i = UInt(start), max = UInt(_cacheFirst); i < max; i++)
+            for i in UInt(start) ..< UInt(_cacheFirst)
             {
                 newEntries.append(buildEntryFromResultObject(results.objectAtIndex(i), atIndex: i))
             }
@@ -189,7 +189,7 @@ public class RealmBaseDataSet: ChartBaseDataSet
         
         if end > _cacheLast
         {
-            for (var i = UInt(_cacheLast + 1), max = UInt(end + 1); i < max; i++)
+            for i in UInt(_cacheLast + 1) ..< UInt(end + 1)
             {
                 _cache.append(buildEntryFromResultObject(results.objectAtIndex(i), atIndex: i))
             }
@@ -252,7 +252,7 @@ public class RealmBaseDataSet: ChartBaseDataSet
         _yMin = DBL_MAX
         _yMax = -DBL_MAX
         
-        for (var i = start; i <= endValue; i++)
+        for i in start ... endValue
         {
             let e = _cache[i - _cacheFirst]
             
@@ -309,9 +309,9 @@ public class RealmBaseDataSet: ChartBaseDataSet
     /// - returns: the first Entry object found at the given xIndex with binary search.
     /// If the no Entry at the specifed x-index is found, this method returns the Entry at the closest x-index.
     /// nil if no Entry object at that index.
-    public override func entryForXIndex(x: Int) -> ChartDataEntry?
+    public override func entryForXIndex(x: Int, rounding: ChartDataSetRounding) -> ChartDataEntry?
     {
-        let index = self.entryIndex(xIndex: x)
+        let index = self.entryIndex(xIndex: x, rounding: rounding)
         if (index > -1)
         {
             return entryForIndex(index)
@@ -319,10 +319,18 @@ public class RealmBaseDataSet: ChartBaseDataSet
         return nil
     }
     
+    /// - returns: the first Entry object found at the given xIndex with binary search.
+    /// If the no Entry at the specifed x-index is found, this method returns the Entry at the closest x-index.
+    /// nil if no Entry object at that index.
+    public override func entryForXIndex(x: Int) -> ChartDataEntry?
+    {
+        return entryForXIndex(x, rounding: .Closest)
+    }
+    
     /// - returns: the array-index of the specified entry
     ///
     /// - parameter x: x-index of the entry to search for
-    public override func entryIndex(xIndex x: Int) -> Int
+    public override func entryIndex(xIndex x: Int, rounding: ChartDataSetRounding) -> Int
     {
         guard let results = _results else { return -1 }
         
@@ -330,10 +338,7 @@ public class RealmBaseDataSet: ChartBaseDataSet
             NSPredicate(format: "%K == %d", _xIndexField!, x)
         )
         
-        if UInt(NSNotFound) == foundIndex
-        {
-            return -1
-        }
+        // TODO: Figure out a way to quickly find the closest index
         
         return Int(foundIndex)
     }
@@ -343,7 +348,7 @@ public class RealmBaseDataSet: ChartBaseDataSet
     /// - parameter e: the entry to search for
     public override func entryIndex(entry e: ChartDataEntry) -> Int
     {
-        for (var i = 0; i < _cache.count; i++)
+        for i in 0 ..< _cache.count
         {
             if (_cache[i] === e || _cache[i].isEqual(e))
             {

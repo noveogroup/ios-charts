@@ -13,7 +13,7 @@
 //
 
 import Foundation
-import UIKit
+
 import Charts
 import Realm
 import Realm.Dynamic
@@ -24,16 +24,16 @@ public class RealmScatterDataSet: RealmLineScatterCandleRadarDataSet, IScatterCh
     public var scatterShapeSize = CGFloat(15.0)
     
     // The type of shape that is set to be drawn where the values are at
-    // - default: .Square
+    // **default**: .Square
     public var scatterShape = ScatterChartDataSet.ScatterShape.Square
     
     // The radius of the hole in the shape (applies to Square, Circle and Triangle)
-    // - default: 0.0
+    // **default**: 0.0
     public var scatterShapeHoleRadius: CGFloat = 0.0
     
     // Color for the hole in the shape. Setting to `nil` will behave as transparent.
-    // - default: nil
-    public var scatterShapeHoleColor: UIColor? = nil
+    // **default**: nil
+    public var scatterShapeHoleColor: NSUIColor? = nil
     
     // Custom path object to draw where the values are at.
     // This is used when shape is set to Custom.

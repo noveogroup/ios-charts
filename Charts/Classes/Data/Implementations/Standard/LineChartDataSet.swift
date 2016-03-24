@@ -13,14 +13,14 @@
 
 import Foundation
 import CoreGraphics
-import UIKit
+
 
 public class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
 {
     private func initialize()
     {
         // default color
-        circleColors.append(UIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
+        circleColors.append(NSUIColor(red: 140.0/255.0, green: 234.0/255.0, blue: 255.0/255.0, alpha: 1.0))
     }
     
     public required init()
@@ -70,17 +70,23 @@ public class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
     /// - returns: true if drawing cubic lines is enabled, false if not.
     public var isDrawCubicEnabled: Bool { return drawCubicEnabled }
     
+    /// If true, stepped lines are drawn instead of linear
+    public var drawSteppedEnabled = false
+
+    /// - returns: true if drawing stepped lines is enabled, false if not.
+    public var isDrawSteppedEnabled: Bool { return drawSteppedEnabled }
+    
     /// The radius of the drawn circles.
     public var circleRadius = CGFloat(8.0)
     
-    public var circleColors = [UIColor]()
+    public var circleColors = [NSUIColor]()
     
     /// - returns: the color at the given index of the DataSet's circle-color array.
     /// Performs a IndexOutOfBounds check by modulus.
-    public func getCircleColor(var index: Int) -> UIColor?
+    public func getCircleColor(index: Int) -> NSUIColor?
     {
         let size = circleColors.count
-        index = index % size
+        let index = index % size
         if (index >= size)
         {
             return nil
@@ -90,7 +96,7 @@ public class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
     
     /// Sets the one and ONLY color that should be used for this DataSet.
     /// Internally, this recreates the colors array and adds the specified color.
-    public func setCircleColor(color: UIColor)
+    public func setCircleColor(color: NSUIColor)
     {
         circleColors.removeAll(keepCapacity: false)
         circleColors.append(color)
@@ -109,7 +115,7 @@ public class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
     public var isDrawCirclesEnabled: Bool { return drawCirclesEnabled }
     
     /// The color of the inner circle (the circle-hole).
-    public var circleHoleColor = UIColor.whiteColor()
+    public var circleHoleColor = NSUIColor.whiteColor()
     
     /// True if drawing circles for this DataSet is enabled, false if not
     public var drawCircleHoleEnabled = true
@@ -124,6 +130,9 @@ public class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
     /// I.e. [2, 3] will paint [--   --   ]
     /// [1, 3, 4, 2] will paint [-   ----  -   ----  ]
     public var lineDashLengths: [CGFloat]?
+    
+    /// Line cap type, default is CGLineCap.Butt
+    public var lineCapType = CGLineCap.Butt
     
     /// formatter for customizing the position of the fill-line
     private var _fillFormatter: ChartFillFormatter = ChartDefaultFillFormatter()
@@ -160,6 +169,7 @@ public class LineChartDataSet: LineRadarChartDataSet, ILineChartDataSet
         copy.lineDashLengths = lineDashLengths
         copy.drawCirclesEnabled = drawCirclesEnabled
         copy.drawCubicEnabled = drawCubicEnabled
+        copy.drawSteppedEnabled = drawSteppedEnabled
         return copy
     }
 }

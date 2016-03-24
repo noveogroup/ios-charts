@@ -13,7 +13,11 @@
 
 import Foundation
 import CoreGraphics
-import UIKit
+
+#if !os(OSX)
+    import UIKit
+#endif
+
 
 public class CandleStickChartRenderer: LineScatterCandleRadarChartRenderer
 {
@@ -67,7 +71,7 @@ public class CandleStickChartRenderer: LineScatterCandleRadarChartRenderer
         
         CGContextSetLineWidth(context, dataSet.shadowWidth)
         
-        for (var j = minx, count = Int(ceil(CGFloat(maxx - minx) * phaseX + CGFloat(minx))); j < count; j++)
+        for j in minx ..< Int(ceil(CGFloat(maxx - minx) * phaseX + CGFloat(minx)))
         {
             // get the entry
             guard let e = dataSet.entryForIndex(j) as? CandleChartDataEntry else { continue }
@@ -119,7 +123,7 @@ public class CandleStickChartRenderer: LineScatterCandleRadarChartRenderer
                 
                 // draw the shadows
                 
-                var shadowColor: UIColor! = nil
+                var shadowColor: NSUIColor! = nil
                 if (dataSet.shadowColorSameAsCandle)
                 {
                     if (open > close)
@@ -215,7 +219,7 @@ public class CandleStickChartRenderer: LineScatterCandleRadarChartRenderer
                 trans.pointValuesToPixel(&_closePoints)
                 
                 // draw the ranges
-                var barColor: UIColor! = nil
+                var barColor: NSUIColor! = nil
                 
                 if (open > close)
                 {
@@ -258,7 +262,7 @@ public class CandleStickChartRenderer: LineScatterCandleRadarChartRenderer
             
             var pt = CGPoint()
             
-            for (var i = 0; i < dataSets.count; i++)
+            for i in 0 ..< dataSets.count
             {
                 let dataSet = dataSets[i]
                 
@@ -282,7 +286,7 @@ public class CandleStickChartRenderer: LineScatterCandleRadarChartRenderer
                 let lineHeight = valueFont.lineHeight
                 let yOffset: CGFloat = lineHeight + 5.0
                 
-                for (var j = minx, count = Int(ceil(CGFloat(maxx - minx) * phaseX + CGFloat(minx))); j < count; j++)
+                for j in minx ..< Int(ceil(CGFloat(maxx - minx) * phaseX + CGFloat(minx)))
                 {
                     guard let e = dataSet.entryForIndex(j) as? CandleChartDataEntry else { break }
                     
@@ -329,7 +333,7 @@ public class CandleStickChartRenderer: LineScatterCandleRadarChartRenderer
         
         CGContextSaveGState(context)
         
-        for (var i = 0; i < indices.count; i++)
+        for i in 0 ..< indices.count
         {
             let xIndex = indices[i].xIndex; // get the x-position
             

@@ -35,10 +35,10 @@
                      @{@"key": @"animateX", @"label": @"Animate X"},
                      @{@"key": @"animateY", @"label": @"Animate Y"},
                      @{@"key": @"animateXY", @"label": @"Animate XY"},
-                     @{@"key": @"toggleStartZero", @"label": @"Toggle StartZero"},
                      @{@"key": @"saveToGallery", @"label": @"Save to Camera Roll"},
                      @{@"key": @"togglePinchZoom", @"label": @"Toggle PinchZoom"},
                      @{@"key": @"toggleAutoScaleMinMax", @"label": @"Toggle auto scale min/max"},
+                     @{@"key": @"toggleData", @"label": @"Toggle Data"},
                      ];
     
     [self setupBarLineChartView:_chartView];
@@ -70,7 +70,6 @@
     
     ChartYAxis *leftAxis = _chartView.leftAxis;
     leftAxis.drawLabelsEnabled = NO;
-    leftAxis.startAtZeroEnabled = NO;
     leftAxis.spaceTop = 0.25f;
     leftAxis.spaceBottom = 0.25f;
     leftAxis.drawAxisLineEnabled = NO;
@@ -82,26 +81,7 @@
     _chartView.rightAxis.enabled = NO;
     _chartView.legend.enabled = NO;
     
-    // THIS IS THE ORIGINAL DATA YOU WANT TO PLOT
-    NSArray<NSDictionary *> *data = @[
-                                      @{@"xIndex": @(0),
-                                        @"yValue": @(-224.1f),
-                                        @"xValue": @"12-19"},
-                                      @{@"xIndex": @(1),
-                                        @"yValue": @(238.5f),
-                                        @"xValue": @"12-30"},
-                                      @{@"xIndex": @(2),
-                                        @"yValue": @(1280.1f),
-                                        @"xValue": @"12-31"},
-                                      @{@"xIndex": @(3),
-                                        @"yValue": @(-442.3f),
-                                        @"xValue": @"01-01"},
-                                      @{@"xIndex": @(4),
-                                        @"yValue": @(-2280.1f),
-                                        @"xValue": @"01-02"},
-                                      ];
-
-    [self setData:data];
+    [self updateChartData];
 }
 
 - (void)didReceiveMemoryWarning
@@ -110,8 +90,38 @@
     // Dispose of any resources that can be recreated.
 }
 
-- (void)setData:(NSArray<NSDictionary *> *)dataList
+- (void)updateChartData
 {
+    if (self.shouldHideData)
+    {
+        _chartView.data = nil;
+        return;
+    }
+    
+    [self setChartData];
+}
+
+- (void)setChartData
+{
+    // THIS IS THE ORIGINAL DATA YOU WANT TO PLOT
+    NSArray<NSDictionary *> *dataList = @[
+                                          @{@"xIndex": @(0),
+                                            @"yValue": @(-224.1f),
+                                            @"xValue": @"12-19"},
+                                          @{@"xIndex": @(1),
+                                            @"yValue": @(238.5f),
+                                            @"xValue": @"12-30"},
+                                          @{@"xIndex": @(2),
+                                            @"yValue": @(1280.1f),
+                                            @"xValue": @"12-31"},
+                                          @{@"xIndex": @(3),
+                                            @"yValue": @(-442.3f),
+                                            @"xValue": @"01-01"},
+                                          @{@"xIndex": @(4),
+                                            @"yValue": @(-2280.1f),
+                                            @"xValue": @"01-02"},
+                                          ];
+    
     NSMutableArray<BarChartDataEntry *> *values = [[NSMutableArray alloc] init];
     NSMutableArray<NSString *> *dates = [[NSMutableArray alloc] init];
     NSMutableArray<UIColor *> *colors = [[NSMutableArray alloc] init];
@@ -155,69 +165,7 @@
 
 - (void)optionTapped:(NSString *)key
 {
-    if ([key isEqualToString:@"toggleValues"])
-    {
-        for (id<IChartDataSet> set in _chartView.data.dataSets)
-        {
-            set.drawValuesEnabled = !set.isDrawValuesEnabled;
-        }
-        
-        [_chartView setNeedsDisplay];
-    }
-    
-    if ([key isEqualToString:@"toggleHighlight"])
-    {
-        _chartView.data.highlightEnabled = !_chartView.data.isHighlightEnabled;
-        [_chartView setNeedsDisplay];
-    }
-    
-    if ([key isEqualToString:@"toggleHighlightArrow"])
-    {
-        _chartView.drawHighlightArrowEnabled = !_chartView.isDrawHighlightArrowEnabled;
-        
-        [_chartView setNeedsDisplay];
-    }
-    
-    if ([key isEqualToString:@"toggleStartZero"])
-    {
-        _chartView.leftAxis.startAtZeroEnabled = !_chartView.leftAxis.isStartAtZeroEnabled;
-        _chartView.rightAxis.startAtZeroEnabled = !_chartView.rightAxis.isStartAtZeroEnabled;
-        
-        [_chartView notifyDataSetChanged];
-    }
-    
-    if ([key isEqualToString:@"animateX"])
-    {
-        [_chartView animateWithXAxisDuration:3.0];
-    }
-    
-    if ([key isEqualToString:@"animateY"])
-    {
-        [_chartView animateWithYAxisDuration:3.0];
-    }
-    
-    if ([key isEqualToString:@"animateXY"])
-    {
-        [_chartView animateWithXAxisDuration:3.0 yAxisDuration:3.0];
-    }
-    
-    if ([key isEqualToString:@"saveToGallery"])
-    {
-        [_chartView saveToCameraRoll];
-    }
-    
-    if ([key isEqualToString:@"togglePinchZoom"])
-    {
-        _chartView.pinchZoomEnabled = !_chartView.isPinchZoomEnabled;
-        
-        [_chartView setNeedsDisplay];
-    }
-    
-    if ([key isEqualToString:@"toggleAutoScaleMinMax"])
-    {
-        _chartView.autoScaleMinMaxEnabled = !_chartView.isAutoScaleMinMaxEnabled;
-        [_chartView notifyDataSetChanged];
-    }
+    [super handleOption:key forChartView:_chartView];
 }
 
 #pragma mark - ChartViewDelegate

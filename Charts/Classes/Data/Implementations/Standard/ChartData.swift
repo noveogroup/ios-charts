@@ -13,7 +13,7 @@
 //
 
 import Foundation
-import UIKit
+
 
 public class ChartData: NSObject
 {
@@ -106,7 +106,7 @@ public class ChartData: NSObject
         
         var sum = 1
         
-        for (var i = 0; i < _xVals.count; i++)
+        for i in 0 ..< _xVals.count
         {
             sum += _xVals[i] == nil ? 0 : (_xVals[i]!).characters.count
         }
@@ -128,7 +128,7 @@ public class ChartData: NSObject
             return
         }
         
-        for (var i = 0; i < dataSets.count; i++)
+        for i in 0 ..< dataSets.count
         {
             if (dataSets[i].entryCount > _xVals.count)
             {
@@ -138,6 +138,8 @@ public class ChartData: NSObject
         }
     }
     
+    /// Call this method to let the ChartData know that the underlying data has changed.
+    /// Calling this performs all necessary recalculations needed when the contained data has changed.
     public func notifyDataChanged()
     {
         initialize(_dataSets)
@@ -160,7 +162,7 @@ public class ChartData: NSObject
             _yMin = DBL_MAX
             _yMax = -DBL_MAX
             
-            for (var i = 0; i < _dataSets.count; i++)
+            for i in 0 ..< _dataSets.count
             {
                 _dataSets[i].calcMinMax(start: start, end: end)
                 
@@ -248,7 +250,7 @@ public class ChartData: NSObject
         
         var count = 0
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             count += _dataSets[i].entryCount
         }
@@ -368,7 +370,7 @@ public class ChartData: NSObject
     {
         if (ignorecase)
         {
-            for (var i = 0; i < dataSets.count; i++)
+            for i in 0 ..< dataSets.count
             {
                 if (dataSets[i].label == nil)
                 {
@@ -382,7 +384,7 @@ public class ChartData: NSObject
         }
         else
         {
-            for (var i = 0; i < dataSets.count; i++)
+            for i in 0 ..< dataSets.count
             {
                 if (label == dataSets[i].label)
                 {
@@ -405,7 +407,7 @@ public class ChartData: NSObject
     {
         var types = [String]()
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             if (dataSets[i].label == nil)
             {
@@ -554,7 +556,7 @@ public class ChartData: NSObject
             return false
         }
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             if (_dataSets[i] === dataSet)
             {
@@ -705,7 +707,7 @@ public class ChartData: NSObject
             return nil
         }
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             let set = _dataSets[i]
             
@@ -721,7 +723,7 @@ public class ChartData: NSObject
     /// - returns: the index of the provided DataSet inside the DataSets array of this data object. -1 if the DataSet was not found.
     public func indexOfDataSet(dataSet: IChartDataSet) -> Int
     {
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             if (_dataSets[i] === dataSet)
             {
@@ -761,7 +763,7 @@ public class ChartData: NSObject
     }
     
     /// - returns: all colors used across all DataSet objects this object represents.
-    public func getColors() -> [UIColor]?
+    public func getColors() -> [NSUIColor]?
     {
         if (_dataSets == nil)
         {
@@ -770,14 +772,14 @@ public class ChartData: NSObject
         
         var clrcnt = 0
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             clrcnt += _dataSets[i].colors.count
         }
         
-        var colors = [UIColor]()
+        var colors = [NSUIColor]()
         
-        for (var i = 0; i < _dataSets.count; i++)
+        for i in 0 ..< _dataSets.count
         {
             let clrs = _dataSets[i].colors
             
@@ -795,7 +797,7 @@ public class ChartData: NSObject
     {
         var xvals = [String]()
         
-        for (var i = from; i < to; i++)
+        for i in from ..< to
         {
             xvals.append(String(i))
         }
@@ -813,7 +815,7 @@ public class ChartData: NSObject
     }
     
     /// Sets the color of the value-text (color in which the value-labels are drawn) for all DataSets this data object contains.
-    public func setValueTextColor(color: UIColor!)
+    public func setValueTextColor(color: NSUIColor!)
     {
         for set in dataSets
         {
@@ -822,7 +824,7 @@ public class ChartData: NSObject
     }
     
     /// Sets the font for all value-labels for all DataSets this data object contains.
-    public func setValueFont(font: UIFont!)
+    public func setValueFont(font: NSUIFont!)
     {
         for set in dataSets
         {
