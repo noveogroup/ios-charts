@@ -198,10 +198,10 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         {
             _rightYAxisRenderer?.computeAxis(yMin: _rightAxis.axisMinimum, yMax: _rightAxis.axisMaximum)
         }
-        
-        _xAxisRenderer?.renderAxisLine(context: context)
-        _leftYAxisRenderer?.renderAxisLine(context: context)
-        _rightYAxisRenderer?.renderAxisLine(context: context)
+// Move to bottom
+//        _xAxisRenderer?.renderAxisLine(context: context)
+//        _leftYAxisRenderer?.renderAxisLine(context: context)
+//        _rightYAxisRenderer?.renderAxisLine(context: context)
 
         if (_autoScaleMinMaxEnabled)
         {
@@ -275,6 +275,10 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
 
         _legendRenderer.renderLegend(context: context)
         // drawLegend()
+        
+        _xAxisRenderer?.renderAxisLine(context: context)
+        _leftYAxisRenderer?.renderAxisLine(context: context)
+        _rightYAxisRenderer?.renderAxisLine(context: context)
 
         drawMarkers(context: context)
 
