@@ -37,8 +37,35 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
         initialize()
     }
     
-    /// if true, value print in 0:00 or 00'00'' format
-    public var specialTimeFormat = false
+    /// if true, value prints with "m" or "km"
+    public var specialDistanceFormat = false {
+        didSet {
+            if specialDistanceFormat == true  {
+                specialTimeFormat = false
+                speciaEnergyFormat = false
+            }
+        }
+    }
+    
+    /// if true, value prints with "kcal"
+    public var speciaEnergyFormat = false {
+        didSet {
+            if speciaEnergyFormat == true  {
+                specialTimeFormat = false
+                specialDistanceFormat = false
+            }
+        }
+    }
+    
+    /// if true, value prints in 0:00 or 00'00'' format
+    public var specialTimeFormat = false {
+        didSet {
+            if specialTimeFormat == true  {
+                specialDistanceFormat = false
+                speciaEnergyFormat = false
+            }
+        }
+    }
     
     public var drawPositiveSumValues = false
     
@@ -156,20 +183,20 @@ public class BarChartDataSet: BarLineScatterCandleBubbleChartDataSet, IBarChartD
     
     /// - returns: the maximum number of bars that can be stacked upon another in this DataSet.
     public var stackSize: Int
-        {
-            return _stackSize
+    {
+        return _stackSize
     }
     
     /// - returns: true if this DataSet is stacked (stacksize > 1) or not.
     public var isStacked: Bool
-        {
-            return _stackSize > 1 ? true : false
+    {
+        return _stackSize > 1 ? true : false
     }
     
     /// - returns: the overall entry count, including counting each stack-value individually
     public var entryCountStacks: Int
-        {
-            return _entryCountStacks
+    {
+        return _entryCountStacks
     }
     
     /// array of labels used to describe the different values of the stacked bars

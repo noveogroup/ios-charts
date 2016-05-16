@@ -294,7 +294,11 @@ public class BarChartRenderer: ChartDataRendererBase
                 // calculate the correct offset depending on the draw position of the value
                 let valueOffsetPlus: CGFloat = 4.5
                 let valueFont = dataSet.valueFont
-                let valueTextHeight = valueFont.lineHeight
+                var valueTextHeight = valueFont.lineHeight
+                if (dataSet as! BarChartDataSet).specialDistanceFormat || (dataSet as! BarChartDataSet).speciaEnergyFormat
+                {
+                    valueTextHeight = valueTextHeight * 2
+                }
                 posOffset = (drawValueAboveBar ? -(valueTextHeight + valueOffsetPlus) : valueOffsetPlus)
                 negOffset = (drawValueAboveBar ? valueOffsetPlus : -(valueTextHeight + valueOffsetPlus))
                 
@@ -371,6 +375,38 @@ public class BarChartRenderer: ChartDataRendererBase
                                 {
                                     str = String(format: "%02d", minutes) + "'" + String(format: "%02d", seconds) + "''";
                                 }
+                            }
+                            
+                            drawValue(context: context,
+                                      value: str,
+                                      xPos: valuePoint.x,
+                                      yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                      font: valueFont,
+                                      align: .Center,
+                                      color: dataSet.valueTextColorAt(j))
+                        }
+                        else if (dataSet as! BarChartDataSet).specialDistanceFormat
+                        {
+                            var str = "0.00\nkm"
+                            if val > 0.0
+                            {
+                                str = String(format: "%.2lf\nkm", val);
+                            }
+                            
+                            drawValue(context: context,
+                                      value: str,
+                                      xPos: valuePoint.x,
+                                      yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                      font: valueFont,
+                                      align: .Center,
+                                      color: dataSet.valueTextColorAt(j))
+                        }
+                        else if (dataSet as! BarChartDataSet).speciaEnergyFormat
+                        {
+                            var str = "0\nkcal"
+                            if val > 0.0
+                            {
+                                str = String(format: "%.0lf\nkcal", val);
                             }
                             
                             drawValue(context: context,
@@ -473,6 +509,38 @@ public class BarChartRenderer: ChartDataRendererBase
                                               align: .Center,
                                               color: dataSet.valueTextColorAt(j))
                                 }
+                                else if (dataSet as! BarChartDataSet).specialDistanceFormat
+                                {
+                                    var str = "0.00\nkm"
+                                    if val > 0.0
+                                    {
+                                        str = String(format: "%.2lf\nkm", val);
+                                    }
+                                    
+                                    drawValue(context: context,
+                                              value: str,
+                                              xPos: valuePoint.x,
+                                              yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                              font: valueFont,
+                                              align: .Center,
+                                              color: dataSet.valueTextColorAt(j))
+                                }
+                                else if (dataSet as! BarChartDataSet).speciaEnergyFormat
+                                {
+                                    var str = "0\nkcal"
+                                    if val > 0.0
+                                    {
+                                        str = String(format: "%.0lf\nkcal", val);
+                                    }
+                                    
+                                    drawValue(context: context,
+                                              value: str,
+                                              xPos: valuePoint.x,
+                                              yPos: valuePoint.y + (val >= 0.0 ? posOffset : negOffset),
+                                              font: valueFont,
+                                              align: .Center,
+                                              color: dataSet.valueTextColorAt(j))
+                                }
                                 else {
                                     drawValue(context: context,
                                               value: formatter.stringFromNumber(val)!,
@@ -546,7 +614,10 @@ public class BarChartRenderer: ChartDataRendererBase
     /// Draws a value at the specified x and y position.
     public func drawValue(context context: CGContext, value: String, xPos: CGFloat, yPos: CGFloat, font: NSUIFont, align: NSTextAlignment, color: NSUIColor)
     {
-        ChartUtils.drawText(context: context, text: value, point: CGPoint(x: xPos, y: yPos), align: align, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: color])
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.alignment = .Center
+        paragraphStyle.lineBreakMode = .ByTruncatingTail
+        ChartUtils.drawText(context: context, text: value, point: CGPoint(x: xPos, y: yPos), align: align, attributes: [NSFontAttributeName: font, NSForegroundColorAttributeName: color, NSParagraphStyleAttributeName: paragraphStyle])
     }
     
     public override func drawExtras(context context: CGContext)

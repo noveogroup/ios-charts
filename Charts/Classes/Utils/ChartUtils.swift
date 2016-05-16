@@ -67,7 +67,7 @@ public class ChartUtils
             return number + DBL_EPSILON
         }
     }
-
+    
     /// - returns: the index of the DataSet that contains the closest value on the y-axis. This will return -Integer.MAX_VALUE if failure.
     internal class func closestDataSetIndex(valsAtIndex: [ChartSelectionDetail], value: Double, axis: ChartYAxis.AxisDependency?) -> Int
     {
@@ -136,9 +136,11 @@ public class ChartUtils
             point.x -= text.sizeWithAttributes(attributes).width
         }
         
+        let size = (text as NSString).sizeWithAttributes(attributes)
+        
         NSUIGraphicsPushContext(context)
         
-        (text as NSString).drawAtPoint(point, withAttributes: attributes)
+        (text as NSString).drawInRect(CGRect(origin:point, size:size), withAttributes: attributes)
         
         NSUIGraphicsPopContext()
     }
