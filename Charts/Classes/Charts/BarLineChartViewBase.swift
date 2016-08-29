@@ -208,7 +208,6 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         // make sure the data cannot be drawn outside the content-rect
         CGContextSaveGState(context)
         CGContextClipToRect(context, _viewPortHandler.contentRect)
-        renderer?.drawData(context: context)
         
         // if highlighting is enabled
         if (valuesToHighlight())
@@ -235,9 +234,13 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         {
             _rightYAxisRenderer?.renderLimitLines(context: context)
         }
-        _xAxisRenderer?.renderAxisLine(context: context)
+        
         _leftYAxisRenderer?.renderAxisLine(context: context)
         _rightYAxisRenderer?.renderAxisLine(context: context)
+        
+        renderer?.drawData(context: context)
+        
+        _xAxisRenderer?.renderAxisLine(context: context)
 
         drawMarkers(context: context)
         
