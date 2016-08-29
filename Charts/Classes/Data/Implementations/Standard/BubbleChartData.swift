@@ -6,7 +6,7 @@
 //    Copyright 2015 Pierre-Marc Airoldi
 //    Licensed under Apache License 2.0
 //
-//  https://github.com/danielgindi/ios-charts
+//  https://github.com/danielgindi/Charts
 //
 
 import Foundation
@@ -19,20 +19,15 @@ public class BubbleChartData: BarLineScatterCandleBubbleChartData
         super.init()
     }
     
-    public override init(xVals: [String?]?, dataSets: [IChartDataSet]?)
+    public override init(dataSets: [IChartDataSet]?)
     {
-        super.init(xVals: xVals, dataSets: dataSets)
-    }
-    
-    public override init(xVals: [NSObject]?, dataSets: [IChartDataSet]?)
-    {
-        super.init(xVals: xVals, dataSets: dataSets)
+        super.init(dataSets: dataSets)
     }
     
     /// Sets the width of the circle that surrounds the bubble when highlighted for all DataSet objects this data object contains
     public func setHighlightCircleWidth(width: CGFloat)
     {
-        for set in _dataSets as! [IBubbleChartDataSet]!
+        for set in (_dataSets as? [IBubbleChartDataSet])!
         {
             set.highlightCircleWidth = width
         }

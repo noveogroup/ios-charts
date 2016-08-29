@@ -2,17 +2,15 @@
 //  RealmLineRadarDataSet.swift
 //  Charts
 //
-//  Created by Daniel Cohen Gindi on 23/2/15.
-
-//
 //  Copyright 2015 Daniel Cohen Gindi & Philipp Jahoda
 //  A port of MPAndroidChart for iOS
 //  Licensed under Apache License 2.0
 //
-//  https://github.com/danielgindi/ios-charts
+//  https://github.com/danielgindi/Charts
 //
 
 import Foundation
+import CoreGraphics
 
 import Charts
 import Realm
@@ -40,7 +38,7 @@ public class RealmLineRadarDataSet: RealmLineScatterCandleRadarDataSet, ILineRad
     
     /// The object that is used for filling the area below the line.
     /// **default**: nil
-    public var fill: ChartFill?
+    public var fill: Fill?
     
     /// The alpha value that is used for filling the line surface,
     /// **default**: 0.33

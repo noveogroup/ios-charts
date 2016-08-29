@@ -2,14 +2,11 @@
 //  PieChartDataSet.swift
 //  Charts
 //
-//  Created by Daniel Cohen Gindi on 24/2/15.
-
-//
 //  Copyright 2015 Daniel Cohen Gindi & Philipp Jahoda
 //  A port of MPAndroidChart for iOS
 //  Licensed under Apache License 2.0
 //
-//  https://github.com/danielgindi/ios-charts
+//  https://github.com/danielgindi/Charts
 //
 
 import Foundation
@@ -17,6 +14,13 @@ import CoreGraphics
 
 public class PieChartDataSet: ChartDataSet, IPieChartDataSet
 {
+    @objc(PieChartValuePosition)
+    public enum ValuePosition: Int
+    {
+        case InsideSlice
+        case OutsideSlice
+    }
+    
     private func initialize()
     {
         self.valueTextColor = NSUIColor.whiteColor()
@@ -29,10 +33,15 @@ public class PieChartDataSet: ChartDataSet, IPieChartDataSet
         initialize()
     }
     
-    public override init(yVals: [ChartDataEntry]?, label: String?)
+    public override init(values: [ChartDataEntry]?, label: String?)
     {
-        super.init(yVals: yVals, label: label)
+        super.init(values: values, label: label)
         initialize()
+    }
+    
+    internal override func calcMinMax(entry e: ChartDataEntry)
+    {
+        calcMinMaxY(entry: e)
     }
     
     // MARK: - Styling functions and accessors
@@ -65,6 +74,27 @@ public class PieChartDataSet: ChartDataSet, IPieChartDataSet
     
     /// indicates the selection distance of a pie slice
     public var selectionShift = CGFloat(18.0)
+    
+    public var xValuePosition: ValuePosition = .InsideSlice
+    public var yValuePosition: ValuePosition = .InsideSlice
+    
+    /// When valuePosition is OutsideSlice, indicates line color
+    public var valueLineColor: NSUIColor? = NSUIColor.blackColor()
+    
+    /// When valuePosition is OutsideSlice, indicates line width
+    public var valueLineWidth: CGFloat = 1.0
+    
+    /// When valuePosition is OutsideSlice, indicates offset as percentage out of the slice size
+    public var valueLinePart1OffsetPercentage: CGFloat = 0.75
+    
+    /// When valuePosition is OutsideSlice, indicates length of first half of the line
+    public var valueLinePart1Length: CGFloat = 0.3
+    
+    /// When valuePosition is OutsideSlice, indicates length of second half of the line
+    public var valueLinePart2Length: CGFloat = 0.4
+    
+    /// When valuePosition is OutsideSlice, this allows variable line length
+    public var valueLineVariableLength: Bool = true
     
     // MARK: - NSCopying
     
