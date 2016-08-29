@@ -78,7 +78,22 @@ public class XAxisRenderer: AxisRendererBase
         let labelHeight = labelSize.height
         
         var labelRotatedSize = ChartUtils.sizeOfRotatedRectangle(labelSize, degrees: xAxis.labelRotationAngle)
-        if twoLines {
+        
+        var twoLines = false
+        
+        for i in 0 ..< xAxis.entries.count
+        {
+            let text = xAxis.getFormattedLabel(i)
+            
+            if text.rangeOfString("\n") != nil
+            {
+                twoLines = true
+                break
+            }
+        }
+        
+        if twoLines
+        {
             labelRotatedSize.height = labelRotatedSize.height * 2
         }
         
