@@ -157,6 +157,95 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
     
     public override func drawRect(rect: CGRect)
     {
+//        super.drawRect(rect)
+//        
+//        if _data === nil
+//        {
+//            return
+//        }
+//        
+//        let optionalContext = NSUIGraphicsGetCurrentContext()
+//        guard let context = optionalContext else { return }
+//
+//        // execute all drawing commands
+//        drawGridBackground(context: context)
+//        
+//        if _leftAxis.isEnabled
+//        {
+//            _leftYAxisRenderer?.computeAxis(min: _leftAxis._axisMinimum, max: _leftAxis._axisMaximum, inverted: _leftAxis.isInverted)
+//        }
+//        if _rightAxis.isEnabled
+//        {
+//            _rightYAxisRenderer?.computeAxis(min: _rightAxis._axisMinimum, max: _rightAxis._axisMaximum, inverted: _rightAxis.isInverted)
+//        }
+//        if _xAxis.isEnabled
+//        {
+//            _xAxisRenderer?.computeAxis(min: _xAxis._axisMinimum, max: _xAxis._axisMaximum, inverted: false)
+//        }
+//        if _autoScaleMinMaxEnabled
+//        {
+//            autoScale()
+//        }
+//        
+//        // The renderers are responsible for clipping, to account for line-width center etc.
+//        _xAxisRenderer?.renderGridLines(context: context)
+//        _leftYAxisRenderer?.renderGridLines(context: context)
+//        _rightYAxisRenderer?.renderGridLines(context: context)
+//        
+//        if _xAxis.isDrawLimitLinesBehindDataEnabled
+//        {
+//            _xAxisRenderer?.renderLimitLines(context: context)
+//        }
+//        if _leftAxis.isDrawLimitLinesBehindDataEnabled
+//        {
+//            _leftYAxisRenderer?.renderLimitLines(context: context)
+//        }
+//        if _rightAxis.isDrawLimitLinesBehindDataEnabled
+//        {
+//            _rightYAxisRenderer?.renderLimitLines(context: context)
+//        }
+//        
+//        // make sure the data cannot be drawn outside the content-rect
+//        CGContextSaveGState(context)
+//        CGContextClipToRect(context, _viewPortHandler.contentRect)
+//        
+//        // if highlighting is enabled
+//        if (valuesToHighlight())
+//        {
+//            renderer?.drawHighlighted(context: context, indices: _indicesToHighlight)
+//        }
+//        
+//        CGContextRestoreGState(context)
+//        
+//        renderer!.drawExtras(context: context)
+//        renderer!.drawValues(context: context)
+//
+//        _legendRenderer.renderLegend(context: context)
+//        
+//        if !_xAxis.isDrawLimitLinesBehindDataEnabled
+//        {
+//            _xAxisRenderer?.renderLimitLines(context: context)
+//        }
+//        if !_leftAxis.isDrawLimitLinesBehindDataEnabled
+//        {
+//            _leftYAxisRenderer?.renderLimitLines(context: context)
+//        }
+//        if !_rightAxis.isDrawLimitLinesBehindDataEnabled
+//        {
+//            _rightYAxisRenderer?.renderLimitLines(context: context)
+//        }
+//        
+//        _leftYAxisRenderer?.renderAxisLine(context: context)
+//        _rightYAxisRenderer?.renderAxisLine(context: context)
+//        
+//        renderer?.drawData(context: context)
+//        
+//        _xAxisRenderer?.renderAxisLine(context: context)
+//
+//        drawMarkers(context: context)
+//        
+//        drawDescription(context: context)
+        
         super.drawRect(rect)
         
         if _data === nil
@@ -166,7 +255,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         
         let optionalContext = NSUIGraphicsGetCurrentContext()
         guard let context = optionalContext else { return }
-
+        
         // execute all drawing commands
         drawGridBackground(context: context)
         
@@ -182,6 +271,11 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         {
             _xAxisRenderer?.computeAxis(min: _xAxis._axisMinimum, max: _xAxis._axisMaximum, inverted: false)
         }
+        
+        _xAxisRenderer?.renderAxisLine(context: context)
+        _leftYAxisRenderer?.renderAxisLine(context: context)
+        _rightYAxisRenderer?.renderAxisLine(context: context)
+        
         if _autoScaleMinMaxEnabled
         {
             autoScale()
@@ -208,6 +302,7 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         // make sure the data cannot be drawn outside the content-rect
         CGContextSaveGState(context)
         CGContextClipToRect(context, _viewPortHandler.contentRect)
+        renderer?.drawData(context: context)
         
         // if highlighting is enabled
         if (valuesToHighlight())
@@ -218,9 +313,6 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
         CGContextRestoreGState(context)
         
         renderer!.drawExtras(context: context)
-        renderer!.drawValues(context: context)
-
-        _legendRenderer.renderLegend(context: context)
         
         if !_xAxis.isDrawLimitLinesBehindDataEnabled
         {
@@ -235,13 +327,14 @@ public class BarLineChartViewBase: ChartViewBase, BarLineScatterCandleBubbleChar
             _rightYAxisRenderer?.renderLimitLines(context: context)
         }
         
-        _leftYAxisRenderer?.renderAxisLine(context: context)
-        _rightYAxisRenderer?.renderAxisLine(context: context)
+        _xAxisRenderer.renderAxisLabels(context: context)
+        _leftYAxisRenderer.renderAxisLabels(context: context)
+        _rightYAxisRenderer.renderAxisLabels(context: context)
         
-        renderer?.drawData(context: context)
+        renderer!.drawValues(context: context)
         
-        _xAxisRenderer?.renderAxisLine(context: context)
-
+        _legendRenderer.renderLegend(context: context)
+        
         drawMarkers(context: context)
         
         drawDescription(context: context)
