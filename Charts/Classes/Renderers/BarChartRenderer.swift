@@ -569,6 +569,8 @@ public class BarChartRenderer: BarLineScatterCandleBubbleRenderer
                             
                             if (dataSet as! BarChartDataSet).drawPositiveSumValues
                             {
+                                let rect = buffer.rects[bufferIndex+1]
+                                
                                 let val = e.positiveSum
                                 if (dataSet as! BarChartDataSet).specialTimeFormat
                                 {
