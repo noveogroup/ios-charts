@@ -469,7 +469,7 @@ public class ChartViewBase: NSUIView, ChartDataProvider, AnimatorDelegate
     /// - parameter highlight: contains information about which entry should be highlighted
     public func highlightValue(highlight: Highlight?)
     {
-        highlightValue(highlight: highlight, callDelegate: false)
+        highlightValue(highlight: highlight, callDelegate: true)
     }
     
     /// Highlights the value at the given x-value in the given DataSet.
