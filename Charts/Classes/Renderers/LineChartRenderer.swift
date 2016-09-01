@@ -195,14 +195,14 @@ public class LineChartRenderer: LineRadarRenderer
             if cur == nil { return }
             
             // let the spline start
-            CGPathMoveToPoint(cubicPath, &valueToPixelMatrix, CGFloat(cur.x), CGFloat(cur.x * phaseY))
+            CGPathMoveToPoint(cubicPath, &valueToPixelMatrix, CGFloat(cur.x), CGFloat(cur.y * phaseY))
             
             for j in (_xBounds.min + 1).stride(through: _xBounds.range + _xBounds.min, by: 1)
             {
                 prev = cur
                 cur = dataSet.entryForIndex(j)
                 
-                let cpx = CGFloat(prev.x + (cur.x - prev.x)) / 2.0
+                let cpx = CGFloat(prev.x + (cur.x - prev.x) / 2.0)
                 
                 CGPathAddCurveToPoint(cubicPath,
                                       &valueToPixelMatrix,
@@ -246,11 +246,11 @@ public class LineChartRenderer: LineRadarRenderer
         
         let fillMin = dataSet.fillFormatter?.getFillLinePosition(dataSet: dataSet, dataProvider: dataProvider) ?? 0.0
 
-        var pt1 = CGPoint(x: CGFloat(bounds.min + bounds.range), y: fillMin)
-        var pt2 = CGPoint(x: CGFloat(bounds.min), y: fillMin)
+        var pt1 = CGPoint(x: CGFloat(dataSet.entryForIndex(bounds.min + bounds.range)?.x ?? 0.0), y: fillMin)
+        var pt2 = CGPoint(x: CGFloat(dataSet.entryForIndex(bounds.min)?.x ?? 0.0), y: fillMin)
         pt1 = CGPointApplyAffineTransform(pt1, matrix)
         pt2 = CGPointApplyAffineTransform(pt2, matrix)
-        
+
         CGPathAddLineToPoint(spline, nil, pt1.x, pt1.y)
         CGPathAddLineToPoint(spline, nil, pt2.x, pt2.y)
         CGPathCloseSubpath(spline)
