@@ -49,8 +49,7 @@
     
     _chartView.delegate = self;
     
-    _chartView.descriptionText = @"";
-    _chartView.noDataTextDescription = @"You need to provide data for the chart.";
+    _chartView.chartDescription.enabled = NO;
     
     _chartView.dragEnabled = YES;
     [_chartView setScaleEnabled:YES];
@@ -59,10 +58,14 @@
     
     _chartView.backgroundColor = [UIColor colorWithWhite:204/255.f alpha:1.f];
     
-    _chartView.legend.form = ChartLegendFormLine;
-    _chartView.legend.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:11.f];
-    _chartView.legend.textColor = UIColor.whiteColor;
-    _chartView.legend.position = ChartLegendPositionBelowChartLeft;
+    ChartLegend *l = _chartView.legend;
+    l.form = ChartLegendFormLine;
+    l.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:11.f];
+    l.textColor = UIColor.whiteColor;
+    l.horizontalAlignment = ChartLegendHorizontalAlignmentLeft;
+    l.verticalAlignment = ChartLegendVerticalAlignmentBottom;
+    l.orientation = ChartLegendOrientationHorizontal;
+    l.drawInside = NO;
     
     ChartXAxis *xAxis = _chartView.xAxis;
     xAxis.labelFont = [UIFont systemFontOfSize:11.f];

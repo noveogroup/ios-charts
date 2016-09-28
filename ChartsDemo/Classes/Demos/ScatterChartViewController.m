@@ -44,8 +44,7 @@
     
     _chartView.delegate = self;
     
-    _chartView.descriptionText = @"";
-    _chartView.noDataTextDescription = @"You need to provide data for the chart.";
+    _chartView.chartDescription.enabled = NO;
     
     _chartView.drawGridBackgroundEnabled = NO;
     _chartView.dragEnabled = YES;
@@ -54,7 +53,10 @@
     _chartView.pinchZoomEnabled = YES;
     
     ChartLegend *l = _chartView.legend;
-    l.position = ChartLegendPositionRightOfChart;
+    l.horizontalAlignment = ChartLegendHorizontalAlignmentRight;
+    l.verticalAlignment = ChartLegendVerticalAlignmentTop;
+    l.orientation = ChartLegendOrientationVertical;
+    l.drawInside = NO;
     l.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10.f];
     l.xOffset = 5.0;
     

@@ -49,8 +49,7 @@
     
     _chartView.delegate = self;
     
-    _chartView.descriptionText = @"";
-    _chartView.noDataTextDescription = @"You need to provide data for the chart.";
+    _chartView.chartDescription.enabled = NO;
     
     _chartView.drawGridBackgroundEnabled = NO;
     _chartView.drawBarShadowEnabled = NO;
@@ -66,7 +65,10 @@
     
     ChartLegend *l = _chartView.legend;
     l.wordWrapEnabled = YES;
-    l.position = ChartLegendPositionBelowChartCenter;
+    l.horizontalAlignment = ChartLegendHorizontalAlignmentCenter;
+    l.verticalAlignment = ChartLegendVerticalAlignmentBottom;
+    l.orientation = ChartLegendOrientationHorizontal;
+    l.drawInside = NO;
     
     ChartYAxis *rightAxis = _chartView.rightAxis;
     rightAxis.drawGridLinesEnabled = NO;

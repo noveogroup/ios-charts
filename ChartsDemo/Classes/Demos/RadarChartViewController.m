@@ -52,7 +52,7 @@
     
     _chartView.delegate = self;
     
-    _chartView.descriptionText = @"";
+    _chartView.chartDescription.enabled = NO;
     _chartView.webLineWidth = 1.0;
     _chartView.innerWebLineWidth = 1.0;
     _chartView.webColor = UIColor.lightGrayColor;
@@ -78,7 +78,10 @@
     yAxis.drawLabelsEnabled = NO;
     
     ChartLegend *l = _chartView.legend;
-    l.position = ChartLegendPositionAboveChartCenter;
+    l.horizontalAlignment = ChartLegendHorizontalAlignmentCenter;
+    l.verticalAlignment = ChartLegendVerticalAlignmentTop;
+    l.orientation = ChartLegendOrientationHorizontal;
+    l.drawInside = NO;
     l.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:10.f];
     l.xEntrySpace = 7.0;
     l.yEntrySpace = 5.0;

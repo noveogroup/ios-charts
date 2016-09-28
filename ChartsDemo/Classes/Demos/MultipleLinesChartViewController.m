@@ -48,8 +48,7 @@
     
     _chartView.delegate = self;
     
-    _chartView.descriptionText = @"";
-    _chartView.noDataTextDescription = @"You need to provide data for the chart.";
+    _chartView.chartDescription.enabled = NO;
     
     _chartView.leftAxis.enabled = NO;
     _chartView.rightAxis.drawAxisLineEnabled = NO;
@@ -63,10 +62,14 @@
     [_chartView setScaleEnabled:YES];
     _chartView.pinchZoomEnabled = NO;
     
-    _chartView.legend.position = ChartLegendPositionRightOfChart;
+    ChartLegend *l = _chartView.legend;
+    l.horizontalAlignment = ChartLegendHorizontalAlignmentRight;
+    l.verticalAlignment = ChartLegendVerticalAlignmentTop;
+    l.orientation = ChartLegendOrientationVertical;
+    l.drawInside = NO;
     
     _sliderX.value = 20.0;
-    _sliderY.value = 10.0;
+    _sliderY.value = 100.0;
     [self slidersValueChanged:nil];
 }
 

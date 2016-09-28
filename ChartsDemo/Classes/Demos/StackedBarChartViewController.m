@@ -45,8 +45,7 @@
     
     _chartView.delegate = self;
     
-    _chartView.descriptionText = @"";
-    _chartView.noDataTextDescription = @"You need to provide data for the chart.";
+    _chartView.chartDescription.enabled = NO;
     
     _chartView.maxVisibleCount = 40;
     _chartView.pinchZoomEnabled = NO;
@@ -70,7 +69,10 @@
     xAxis.labelPosition = XAxisLabelPositionTop;
     
     ChartLegend *l = _chartView.legend;
-    l.position = ChartLegendPositionBelowChartRight;
+    l.horizontalAlignment = ChartLegendHorizontalAlignmentRight;
+    l.verticalAlignment = ChartLegendVerticalAlignmentBottom;
+    l.orientation = ChartLegendOrientationHorizontal;
+    l.drawInside = NO;
     l.form = ChartLegendFormSquare;
     l.formSize = 8.0;
     l.formToTextSpace = 4.0;

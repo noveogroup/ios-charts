@@ -3,41 +3,49 @@ def type
 end
 
 def project_name
-  "Charts/Charts.xcodeproj"
+  "Charts.xcodeproj"
 end
 
 def configuration
   "Debug"
 end
 
-def test_targets
+def test_platforms
   [
     :ios,
-    # :tvos #no tvOS fbsnapshot
+    :tvos
   ]
 end
 
 def schemes
-  {
-    ios: 'Charts-iOS',
-    tvos: 'Charts-TV'
-  }
-end
-
-def sdks
-  {
-    ios: 'iphonesimulator',
-    osx: 'macosx',
-    tvos: 'appletvsimulator'
-  }
+  [
+    "ChartsTests"
+  ]
 end
 
 def devices
   {
-    ios: "name='iPhone 6s'",
-    osx: "arch='x86_64'",
-    tvos: "name='Apple TV 1080p'"
+    ios: { 
+      sdk: "iphonesimulator", 
+      device: "name='iPhone 7'", 
+      uuid: "5F911B30-5F23-403B-9697-1DFDC24773C8" 
+    },
+    macos: { 
+      sdk: "macosx", 
+      device: "arch='x86_64'", 
+      uuid: nil 
+    },
+    tvos: { 
+      sdk: "appletvsimulator", 
+      device: "name='Apple TV 1080p'", 
+      uuid: "273D776F-196E-4F2A-AEF2-E1E3EAE99B47" 
+    }
   }
+end
+
+def open_simulator_and_sleep(uuid)
+  return if uuid.nil? # Don't need a sleep on macOS because it runs first.
+  sh "xcrun instruments -w '#{uuid}' || sleep 15"
 end
 
 def xcodebuild(type, name, scheme, configuration, sdk, destination, tasks, xcprety_args: '')
@@ -56,31 +64,46 @@ def xcodebuild(type, name, scheme, configuration, sdk, destination, tasks, xcpre
 
 end
 
+def run_xcodebuild(schemes, tasks, destination, is_test, xcprety_args)
+  sdk = destination[:sdk]
+  device = destination[:device]
+  uuid = destination[:uuid]
+
+  if is_test
+    open_simulator_and_sleep uuid
+  end
+
+  schemes.each do |scheme| 
+    xcodebuild type, project_name, scheme, configuration, sdk, device, tasks, xcprety_args
+  end
+
+  if is_test
+    sh "killall Simulator"
+  end
+end
+
 def execute(tasks, platform, xcprety_args)
 
+  is_test = tasks.include?("test")
+
   # platform specific settings
-  sdk = sdks[platform]
-  scheme = schemes[platform]
   destination = devices[platform]
 
   # check if xcodebuild needs to be run on multiple devices
-  if destination.respond_to?('map')
-    destination.map do |destination|
-      xcodebuild type, project_name, scheme, configuration, sdk, destination, tasks, xcprety_args
+  if destination.is_a?(Array)
+    destination.each do |destination|
+        run_xcodebuild schemes, tasks, destination, is_test, xcprety_args
     end
-  else
-    xcodebuild type, project_name, scheme, configuration, sdk, destination, tasks, xcprety_args
+  else 
+    run_xcodebuild schemes, tasks, destination, is_test, xcprety_args
   end
-
 end
 
-desc 'Build, then run tests.'
+desc "Build, then run tests."
 task :test do
 
-  test_targets.map do |platform|
-    execute 'build test', platform, xcprety_args: '--test'
+  test_platforms.each do |platform|
+    execute "build test", platform, xcprety_args: "--test"
   end
-
-  sh "killall Simulator"
 
 end
